@@ -1,0 +1,24 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual env
+.venv/
+env/
+venv/
+
+# OS files
+.DS_Store
+
+# Data / logs
+*.log
+data/
+tmp/
+.parquet
+*.parquet
+*.duckdb
+
+# Python misc
+*.ipynb_checkpoints/
