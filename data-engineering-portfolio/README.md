@@ -1,36 +1,72 @@
-# Data Engineering Portfolio
+📊 Data Engineering Portfolio
 
-Two production-style, minimal projects you can demo quickly and talk through in interviews.
+This repository showcases two end-to-end data engineering projects designed to demonstrate production-style workflows in both real-time streaming and batch lakehouse paradigms.
 
-## Projects
-1. **streaming_pipeline** — Real-time analytics with Kafka + Spark Structured Streaming (local dev via Docker).
-2. **data_lakehouse** — Lakehouse-style batch analytics using Parquet + DuckDB (Glue/Athena simulated locally), with a dbt placeholder.
+The projects are lightweight, fully reproducible locally, and cover concepts like event streaming, ETL, orchestration, observability, and analytics.
 
-Each project is self-contained with a `README.md` outlining setup and run instructions.
+1. Streaming Pipeline – Real-Time Analytics
 
-> Tip: After verifying locally, create a GitHub repo (e.g., `data-engineering-portfolio`) and push this tree.
-> You can then link to each project from your resume.
+Stack: Apache Kafka, Spark Structured Streaming, Python, Docker, (optional: Prometheus + Grafana)
 
-## Quickstart
-```bash
-# clone and enter
-git clone <your-repo-url>
-cd data-engineering-portfolio
+Description
 
-# choose a project
+This project simulates IoT-style sensor events being streamed in real-time. Events are ingested into Kafka, processed with Spark Structured Streaming, and written to the console (or Parquet for persistence). Optional hooks are provided for Grafana dashboards via Prometheus metrics.
+Steps to Run:
+
 cd streaming_pipeline
-# see README for commands
 
-cd ../data_lakehouse
-# see README for commands
-```
+# 1. Start Kafka broker & ZooKeeper
+docker-compose up -d
 
----
+# 2. Start producer to send events
+pip install -r requirements.txt
+python producer.py --bootstrap localhost:9092 --topic iot-events --rate 5
 
-## Tech Stack Coverage
-- **Streaming:** Apache Kafka, Spark Structured Streaming
-- **Batch:** PySpark-style transforms, Parquet
-- **Query Layer:** DuckDB (simulating Athena/Spectrum locally)
-- **Infra:** Docker Compose for Kafka/ZooKeeper locally
-- **Observability:** Notes for wiring into Grafana/Prometheus (optional extension)
-- **Orchestration (optional):** dbt placeholder included for transforming curated models
+# 3. Run Spark consumer
+spark-submit \
+  --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0 \
+  spark_app.py
+
+👉 You’ll see alert events streaming in the console when temperature > 35°C.
+For persistence, you can replace the sink with a Parquet writer and integrate monitoring with Grafana.
+
+
+2. Data Lakehouse – Batch Analytics
+
+Stack: PySpark, Parquet, DuckDB, dbt (placeholder), Tableau/Superset
+
+Description
+
+This project demonstrates how to build a lakehouse-style architecture locally. Raw CSV data is cleaned and transformed with PySpark (simulating AWS Glue), stored in Parquet (data lake), and queried with DuckDB (simulating Athena/Redshift Spectrum). The dbt folder is included as a placeholder for curated models.
+
+Steps to Run:
+cd data_lakehouse
+
+# 1. Place raw CSV into data/raw/
+# Example: data/raw/nyc_taxi.csv
+
+# 2. Run ETL to produce Parquet output
+spark-submit etl_spark.py
+
+# 3. Run DuckDB analytics queries
+pip install duckdb
+python duckdb_analytics.py
+
+
+👉 Output: Aggregated results (e.g., average fare by passenger count) are printed to the console.
+You can extend this by:
+
+Adding dbt models for staging/curated layers
+
+Connecting Tableau or Apache Superset for BI dashboards
+
+Migrating storage to AWS S3 and running the same jobs with Glue + Athena
+
+
+🛠 Tech Stack Coverage
+
+# Streaming: Apache Kafka, Spark Structured Streaming
+# Batch / Lakehouse: PySpark ETL, Parquet, DuckDB (Athena/Redshift simulation)
+# Infra: Docker Compose for Kafka/ZooKeeper
+# Monitoring: Prometheus + Grafana integration (optional extension)
+# Orchestration: dbt placeholder included for curated data transformations
