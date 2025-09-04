@@ -65,8 +65,8 @@ Migrating storage to AWS S3 and running the same jobs with Glue + Athena
 
 🛠 Tech Stack Coverage
 
-# Streaming: Apache Kafka, Spark Structured Streaming
-# Batch / Lakehouse: PySpark ETL, Parquet, DuckDB (Athena/Redshift simulation)
-# Infra: Docker Compose for Kafka/ZooKeeper
-# Monitoring: Prometheus + Grafana integration (optional extension)
-# Orchestration: dbt placeholder included for curated data transformations
+### Streaming: Apache Kafka, Spark Structured Streaming
+### Batch / Lakehouse: PySpark ETL, Parquet, DuckDB (Athena/Redshift simulation)
+### Infra: Docker Compose for Kafka/ZooKeeper
+### Monitoring: Prometheus + Grafana integration (optional extension)
+### Orchestration: dbt placeholder included for curated data transformations
